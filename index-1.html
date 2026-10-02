@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>برای ستایش ♡</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;overflow:hidden;font-family:Arial,sans-serif;background:radial-gradient(circle at 20% 10%,#fff,#ffeaf3 32%,#f7b0ce);color:#76264b;display:grid;place-items:center}.card{width:min(92vw,510px);max-height:92vh;overflow:auto;padding:36px 26px;text-align:center;background:#ffffffc7;backdrop-filter:blur(18px);border:1px solid #fff;border-radius:36px;box-shadow:0 25px 70px #8b2a5725}.logo{font-size:60px;animation:pulse 1.7s infinite}@keyframes pulse{50%{transform:scale(1.1)}}.badge{display:inline-block;background:#fff;padding:7px 15px;border-radius:30px;color:#bd4775;font-size:12px;font-weight:bold}h1{font-size:25px;line-height:1.9;margin:14px 0 8px}p{font-size:14px;line-height:2;color:#9b5875}.options{display:grid;gap:12px;margin-top:22px}button{border:0;width:100%;padding:15px;border-radius:18px;font:bold 15px Arial;cursor:pointer;color:#79264c;background:#fff;box-shadow:0 8px 24px #8b2a5715;transition:.22s}.primary{color:#fff;background:linear-gradient(135deg,#ef72a5,#bd3f73)}.no{position:relative}.progress{height:5px;background:#f5cada;border-radius:9px;margin:20px 0}.progress span{display:block;height:100%;background:#bd3f73;border-radius:9px}#hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}.heart{position:absolute;bottom:-50px;animation:rise linear forwards;opacity:.8}@keyframes rise{to{transform:translateY(-115vh) rotate(30deg);opacity:0}}.final{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:25px;background:radial-gradient(circle,#fff4fa,#ffd6e7 45%,#f29bc1);z-index:10}.final h2{font-size:30px;color:#9f285a}.final p{font-size:17px;color:#79314f}
+</style></head><body>
+<div id="hearts"></div><main class="card" id="app"></main>
+<div class="final" id="final"><div class="logo">💗</div><h2>قرارمون قطعی شد، ستایش جان ❤️</h2><p id="finalText"></p><p>حالا فقط مونده اون روز قشنگ برسه… ✨</p></div>
+<script>
+const SAVE_URL="https://formspree.io/f/xjykqdoa";
+const s={day:"",time:"",food:""};let step=1;
+const days=["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه"];
+const foods=["نسکافه و کیک","قهوه و کیک","چیپس و نوشابه"];
+function hearts(n=1){for(let i=0;i<n;i++)setTimeout(()=>{let x=document.createElement("span");x.className="heart";x.textContent=["♡","♥","💗","❤"][Math.floor(Math.random()*4)];x.style.left=Math.random()*100+"%";x.style.fontSize=15+Math.random()*30+"px";x.style.color=["#ed72a4","#d94d83","#f2a5c4"][Math.floor(Math.random()*3)];x.style.animationDuration=5+Math.random()*6+"s";document.getElementById("hearts").appendChild(x);setTimeout(()=>x.remove(),12000)},i*55)}
+setInterval(()=>hearts(),650);
+function page(t,sub,b){app.innerHTML=`<div class=badge>برای ستایش ♡</div><div class=logo>♡</div><div class=progress><span style="width:${Math.min(step,4)*25}%"></span></div><h1>${t}</h1><p>${sub}</p>${b}`}
+function start(){step=1;page("ستایش جان، دلم یه عصرِ قشنگ رو فقط با تو می‌خواد… میای؟ ❤️","فقط یه قرار کوچیک؛ برای ساختن یه خاطره‌ی قشنگ دونفره.",`<div class=options><button class=primary onclick=day()>آره، با دل و جون ❤️</button><button class=no id=no onmouseenter=escapeNo ontouchstart=escapeNo>نه 🙈</button></div>`)}
+function escapeNo(){no.style.transform=`translate(${Math.random()*180-90}px,${Math.random()*100-50}px)`}
+function day(){step=2;page("کدوم روز برای این قرار قشنگه؟ ✨","یه روز رو انتخاب کن.",`<div class=options>${days.map(x=>`<button onclick="pickDay('${x}')">${x} ♡</button>`).join("")}</div>`)}
+function pickDay(x){s.day=x;step=3;page("حالا ساعت قرارمون… ⏰","یکی رو انتخاب کن.",`<div class=options><button onclick="pickTime('16:00')">16:00</button><button onclick="pickTime('17:00')">17:00</button><button onclick="pickTime('18:00')">18:00</button></div>`)}
+function pickTime(x){s.time=x;step=4;page("برای خوردنی چی انتخاب کنیم؟ ☕🍰","انتخاب با تو؛ من فقط از همراهیت خوشحالم.",`<div class=options>${foods.map(f=>`<button onclick="pickFood('${f}')">${f}</button>`).join("")}</div>`)}
+function pickFood(x){s.food=x;step=5;page("همه‌چیز آماده‌ست… 💗","حالا برنامه‌ی قرارمون کامل شد.",`<div style="background:#fff5f9;padding:18px;border-radius:22px;line-height:2.4;text-align:right">📅 <b>روز:</b> ${s.day}<br>⏰ <b>ساعت:</b> ${s.time}<br>☕ <b>انتخاب:</b> ${s.food}</div><div class=options><button class=primary onclick=finish()>ثبت قرار ❤️</button></div>`)}
+async function finish(){
+localStorage.setItem("setayeshDate",JSON.stringify(s));
+try{await fetch(SAVE_URL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({day:s.day,time:s.time,food:s.food})})}catch(e){}
+finalText.innerHTML=`روز <b>${s.day}</b>، ساعت <b>${s.time}</b><br>با <b>${s.food}</b> ☕🍰`;
+document.querySelector(".card").style.display="none";final.style.display="flex";hearts(100)}
+const old=localStorage.getItem("setayeshDate");if(old){Object.assign(s,JSON.parse(old));finish()}else start();
+</script></body></html>
